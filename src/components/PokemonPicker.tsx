@@ -2,12 +2,13 @@ import PokemonItem from "./PokemonItem"
 
 const PokemonPicker = () => {
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <div className="rotate-180">
         <PokemonItem pokemonId={1} />
       </div>
-
-      <PokemonItem pokemonId={2} />
+      <div className="mt-auto">
+        <PokemonItem pokemonId={2} />
+      </div>
     </div>
   )
 }

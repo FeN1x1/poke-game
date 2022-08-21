@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
 import { Card, Link } from "konsta/react"
 import { Pokemon } from "../types"
-import PokemonDescription from "./PokemonDescription"
+import PokemonType from "./PokemonType"
 
 const PokemonItem: React.FC<{ pokemonId: number }> = ({ pokemonId }) => {
   const fetchPokemon = async (number: number): Promise<Pokemon> => {
@@ -16,27 +16,28 @@ const PokemonItem: React.FC<{ pokemonId: number }> = ({ pokemonId }) => {
 
   return (
     <div>
-      <Card
-        header={
-          <div
-            className="capitalize -mx-4 -my-2 h-48 p-4 flex items-end text-white font-bold bg-contain bg-no-repeat bg-center"
-            style={{
-              backgroundImage: `url(${data?.sprites.other["official-artwork"].front_default})`,
-            }}
-          >
-            {data?.name}
-          </div>
-        }
-        footer={
-          <div className="flex justify-between">
-            <Link>Like</Link>
-            <Link>Read more</Link>
-          </div>
-        }
-      >
-        <div className="text-gray-500 mb-3">Posted on January 21, 2021</div>
-        <PokemonDescription pokemonId={pokemonId} />
-      </Card>
+      {data && (
+        <Card
+          header={
+            <div
+              className="text-black text-xl capitalize -mx-4 -my-2 h-48 p-4 flex items-end font-bold bg-contain bg-no-repeat bg-center"
+              style={{
+                backgroundImage: `url(${data.sprites.other["official-artwork"].front_default})`,
+              }}
+            >
+              <div className="relative bottom-[8.7rem]">{data.name}</div>
+            </div>
+          }
+          footer={
+            <div className="flex justify-between">
+              <Link>Like</Link>
+              <Link>Read more</Link>
+            </div>
+          }
+        >
+          <PokemonType pokemonTypes={data.types} />
+        </Card>
+      )}
     </div>
   )
 }
