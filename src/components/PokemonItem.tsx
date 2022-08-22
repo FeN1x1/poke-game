@@ -1,9 +1,13 @@
 import { useQuery } from "react-query"
 import { Card, Link } from "konsta/react"
-import { Pokemon } from "../types"
+import { Pokemon, pokemonTypesMap } from "../types"
 import PokemonType from "./PokemonType"
 
-const PokemonItem: React.FC<{ pokemonId: number }> = ({ pokemonId }) => {
+const PokemonItem: React.FC<{
+  pokemonId: number
+  tryAnotherPokemon: () => void
+  takePokemon: () => void
+}> = ({ pokemonId, tryAnotherPokemon, takePokemon }) => {
   const fetchPokemon = async (number: number): Promise<Pokemon> => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${number}`)
     return await response.json()
@@ -13,6 +17,10 @@ const PokemonItem: React.FC<{ pokemonId: number }> = ({ pokemonId }) => {
     () => fetchPokemon(pokemonId),
     { staleTime: Infinity }
   )
+
+  const setPokemonNameBackgroundColor = (type: string) => {
+    return `${pokemonTypesMap.get(type)} rounded-full px-3 py-1 text-sm`
+  }
 
   return (
     <div>
@@ -25,13 +33,22 @@ const PokemonItem: React.FC<{ pokemonId: number }> = ({ pokemonId }) => {
                 backgroundImage: `url(${data.sprites.other["official-artwork"].front_default})`,
               }}
             >
-              <div className="relative bottom-[8.7rem]">{data.name}</div>
+              <div
+                className={setPokemonNameBackgroundColor(
+                  data.types[0].type.name
+                )}
+              >
+                {data.name}
+              </div>
+              <div className="ml-auto relative bottom-32 text-white bg-gray-600 rounded-full text-sm px-3 py-1">
+                {pokemonId}
+              </div>
             </div>
           }
           footer={
             <div className="flex justify-between">
-              <Link>Like</Link>
-              <Link>Read more</Link>
+              <Link onClick={takePokemon}>Take</Link>
+              <Link onClick={tryAnotherPokemon}>Gimme anotha one</Link>
             </div>
           }
         >
