@@ -17,14 +17,11 @@ const PokemonPicker = () => {
     (state) => state.secondPlayerPokemonIds
   )
 
-  console.log(getFirstPlayerPokemons)
-  console.log(getSecondPlayerPokemons)
-
   return (
     <div className="flex flex-col h-screen">
       <div className="rotate-180">
         <PokemonItem
-          player={1}
+          player
           pokemonId={firstPokemonId}
           chosenNumber={getFirstPlayerPokemons.length}
           generatePokemon={() => setFirstPokemonId(generateRandomNumber)}
@@ -32,7 +29,7 @@ const PokemonPicker = () => {
       </div>
       <div className="mt-auto">
         <PokemonItem
-          player={2}
+          player={false}
           pokemonId={secondPokemonId}
           chosenNumber={getSecondPlayerPokemons.length}
           generatePokemon={() => setSecondPokemonId(generateRandomNumber)}

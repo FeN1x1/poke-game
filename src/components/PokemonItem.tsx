@@ -3,9 +3,10 @@ import { Card, Button } from "konsta/react"
 import { Pokemon, pokemonTypesMap } from "../types"
 import PokemonType from "./PokemonType"
 import { useStore } from "../store/pokemonStore"
+import { Haptics, ImpactStyle } from "@capacitor/haptics"
 
 const PokemonItem: React.FC<{
-  player: number
+  player: boolean
   pokemonId: number
   chosenNumber: number
   generatePokemon: () => void
@@ -28,8 +29,9 @@ const PokemonItem: React.FC<{
     (state) => state.addPokemonToSecondPlayer
   )
 
-  const takePokemonAndSaveState = (pokemonName: string) => {
-    player === 1
+  const takePokemonAndSaveState = async (pokemonName: string) => {
+    await Haptics.impact({ style: ImpactStyle.Medium })
+    player
       ? addPokemonToFirstPlayer(pokemonId, pokemonName)
       : addPokemonToSecondPlayer(pokemonId, pokemonName)
     generatePokemon()

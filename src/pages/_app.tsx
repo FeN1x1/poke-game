@@ -2,9 +2,9 @@ import "../styles/globals.css"
 import type { AppProps } from "next/app"
 import { App } from "konsta/react"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { showSplash } from "../utils/splashScreen"
+import { appInit } from "../utils/appInit"
 
-showSplash()
+appInit()
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
