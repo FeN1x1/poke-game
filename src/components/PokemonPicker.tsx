@@ -8,44 +8,34 @@ const PokemonPicker = () => {
     useState<number>(generateRandomNumber)
   const [secondPokemonId, setSecondPokemonId] =
     useState<number>(generateRandomNumber)
-  const addPokemonToFirstPlayer = useStore(
-    (state) => state.addPokemonToFirstPlayer
+
+  const getFirstPlayerPokemons = useStore(
+    (state) => state.firstPlayerPokemonIds
   )
 
-  const addPokemonToSecondPlayer = useStore(
-    (state) => state.addPokemonToSecondPlayer
+  const getSecondPlayerPokemons = useStore(
+    (state) => state.secondPlayerPokemonIds
   )
 
-  const firstPlayerTakePokemon = () => {
-    addPokemonToFirstPlayer(firstPokemonId)
-    setFirstPokemonId(generateRandomNumber)
-  }
-
-  const secondPlayerTakePokemon = () => {
-    addPokemonToSecondPlayer(secondPokemonId)
-    setSecondPokemonId(generateRandomNumber)
-  }
-
-  // const getFirstPlayerPokemons = useStore(
-  //   (state) => state.firstPlayerPokemonIds
-  // )
-
-  // console.log(getFirstPlayerPokemons)
+  console.log(getFirstPlayerPokemons)
+  console.log(getSecondPlayerPokemons)
 
   return (
     <div className="flex flex-col h-screen">
       <div className="rotate-180">
         <PokemonItem
+          player={1}
           pokemonId={firstPokemonId}
-          takePokemon={firstPlayerTakePokemon}
-          tryAnotherPokemon={() => setFirstPokemonId(generateRandomNumber)}
+          chosenNumber={getFirstPlayerPokemons.length}
+          generatePokemon={() => setFirstPokemonId(generateRandomNumber)}
         />
       </div>
       <div className="mt-auto">
         <PokemonItem
+          player={2}
           pokemonId={secondPokemonId}
-          takePokemon={secondPlayerTakePokemon}
-          tryAnotherPokemon={() => setSecondPokemonId(generateRandomNumber)}
+          chosenNumber={getSecondPlayerPokemons.length}
+          generatePokemon={() => setSecondPokemonId(generateRandomNumber)}
         />
       </div>
     </div>

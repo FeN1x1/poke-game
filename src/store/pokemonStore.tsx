@@ -1,23 +1,40 @@
 import create from "zustand"
 
 interface PokemonSets {
-  firstPlayerPokemonIds: Number[]
-  secondPlayerPokemonIds: Number[]
-  addPokemonToFirstPlayer: (pokemonId: number) => void
-  addPokemonToSecondPlayer: (pokemonId: number) => void
+  firstPlayerPokemonIds: PokemonInfo[]
+  secondPlayerPokemonIds: PokemonInfo[]
+  addPokemonToFirstPlayer: (pokemonId: number, pokemonName: string) => void
+  addPokemonToSecondPlayer: (pokemonId: number, pokemonName: string) => void
+}
+
+type PokemonInfo = {
+  pokemonId: number
+  pokemonName: string
 }
 
 export const useStore = create<PokemonSets>((set) => ({
-  firstPlayerPokemonIds: [] as Number[],
-  secondPlayerPokemonIds: [] as Number[],
-  addPokemonToFirstPlayer: (pokemonId: number) => {
+  firstPlayerPokemonIds: [],
+  secondPlayerPokemonIds: [],
+  addPokemonToFirstPlayer: (pokemonId, pokemonName) => {
     set((state) => ({
-      firstPlayerPokemonIds: [...state.firstPlayerPokemonIds, pokemonId],
+      firstPlayerPokemonIds: [
+        ...state.firstPlayerPokemonIds,
+        {
+          pokemonId,
+          pokemonName,
+        },
+      ],
     }))
   },
-  addPokemonToSecondPlayer: (pokemonId: number) => {
+  addPokemonToSecondPlayer: (pokemonId, pokemonName) => {
     set((state) => ({
-      secondPlayerPokemonIds: [...state.secondPlayerPokemonIds, pokemonId],
+      secondPlayerPokemonIds: [
+        ...state.secondPlayerPokemonIds,
+        {
+          pokemonId,
+          pokemonName,
+        },
+      ],
     }))
   },
 }))

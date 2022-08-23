@@ -6,9 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build-mobile": "next build && next export && npx cap sync && npx cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^4.1.0",
+    "@capacitor/cli": "^4.1.0",
+    "@capacitor/core": "^4.1.0",
+    "@capacitor/splash-screen": "^4.0.1",
     "konsta": "^0.11.1",
     "next": "12.2.5",
     "react": "18.2.0",
