@@ -1,12 +1,12 @@
 // Konsta UI components
 import { Page } from "konsta/react"
 import type { NextPage } from "next"
-import PokemonPicker from "../components/PokemonPicker"
+import Swiper from "../components/intro/Swiper"
 
 const Home: NextPage = () => {
   return (
     <Page>
-      <PokemonPicker />
+      <Swiper />
     </Page>
   )
 }
