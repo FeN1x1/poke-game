@@ -1,5 +1,7 @@
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react"
+import { introSlides } from "../../types/staticData"
 import "swiper/css"
+
 import Slide from "./Slide"
 
 const Swiper = () => {
@@ -11,12 +13,16 @@ const Swiper = () => {
       onSlideChange={() => console.log("slide change")}
       onSwiper={(swiper) => console.log(swiper)}
     >
-      <SwiperSlide className="block">
-        <Slide />
-      </SwiperSlide>
-      <SwiperSlide>
-        <Slide />
-      </SwiperSlide>
+      {introSlides.map((s) => (
+        <SwiperSlide key={s.title} className="block">
+          <Slide
+            title={s.title}
+            text={s.text}
+            image={s.image}
+            imageAlt={s.imageAlt}
+          />
+        </SwiperSlide>
+      ))}
     </SwiperReact>
   )
 }

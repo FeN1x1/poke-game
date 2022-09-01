@@ -1,10 +1,9 @@
 import { PokemonType } from "../types"
-import { pokemonTypesMap } from "../types"
+import { pokemonTypesMap } from "../types/staticData"
 
 const PokemonType: React.FC<{ pokemonTypes: PokemonType[] }> = ({
   pokemonTypes,
 }) => {
-
   return (
     <div className="flex gap-2">
       {pokemonTypes &&
