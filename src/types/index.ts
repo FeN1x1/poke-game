@@ -20,3 +20,26 @@ export type PokemonType = {
     url: string
   }
 }
+
+export interface PokemonSets {
+  playerPokemons: PlayerPokemons
+  addPokemonToPlayer: (
+    player: keyof PlayerPokemons,
+    pokemonId: number,
+    pokemonName: string
+  ) => void
+  deletePokemonFromPlayer: (
+    player: keyof PlayerPokemons,
+    pokemonId: number | undefined
+  ) => void
+}
+
+export type PlayerPokemons = {
+  firstPlayer: PokemonInfo[]
+  secondPlayer: PokemonInfo[]
+}
+
+export type PokemonInfo = {
+  pokemonId: number
+  pokemonName: string
+}

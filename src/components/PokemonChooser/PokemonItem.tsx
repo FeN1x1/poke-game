@@ -1,16 +1,16 @@
 import { useQuery } from "react-query"
 import { Card, Button } from "konsta/react"
-import { Pokemon } from "../../types"
+import { PlayerPokemons, Pokemon } from "../../types"
 import { pokemonTypesMap } from "../../types/staticData"
 import PokemonType from "../PokemonType"
-import { useStore } from "../../store/pokemonStore"
+import { useStore } from "../../store/refactoredPokemonStore"
 import { Haptics, ImpactStyle } from "@capacitor/haptics"
 import autoAnimate from "@formkit/auto-animate"
 import { useRef, useEffect } from "react"
-import PokemonAllChosen from "./PokemonAllChosen"
+import PokemonAllChosen from "../PokemonAllChosen"
 
 const PokemonItem: React.FC<{
-  player: boolean
+  player: keyof PlayerPokemons
   pokemonId: number
   chosenNumber: number
   generatePokemon: () => void
@@ -27,13 +27,7 @@ const PokemonItem: React.FC<{
     { staleTime: Infinity }
   )
 
-  const addPokemonToFirstPlayer = useStore(
-    (state) => state.addPokemonToFirstPlayer
-  )
-
-  const addPokemonToSecondPlayer = useStore(
-    (state) => state.addPokemonToSecondPlayer
-  )
+  const addPokemonToPlayer = useStore((state) => state.addPokemonToPlayer)
 
   useEffect(() => {
     pokemonCardRef.current && autoAnimate(pokemonCardRef.current)
@@ -41,9 +35,7 @@ const PokemonItem: React.FC<{
 
   const takePokemonAndSaveState = async (pokemonName: string) => {
     await Haptics.impact({ style: ImpactStyle.Medium })
-    player
-      ? addPokemonToFirstPlayer(pokemonId, pokemonName)
-      : addPokemonToSecondPlayer(pokemonId, pokemonName)
+    addPokemonToPlayer(player, pokemonId, pokemonName)
     generatePokemon()
   }
 

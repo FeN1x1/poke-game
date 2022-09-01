@@ -1,5 +1,6 @@
 import { PokemonInfo } from "../../store/pokemonStore"
 import { Radio, Button, List, ListItem } from "konsta/react"
+import { PlayerPokemons } from "../../types"
 
 const PokemonSelect: React.FC<{
   selectedPokemon: number | undefined
@@ -13,7 +14,7 @@ const PokemonSelect: React.FC<{
         {pokemons &&
           pokemons.map((p) => (
             <ListItem
-                key={p.pokemonId}
+              key={p.pokemonId}
               label
               title={p.pokemonName}
               media={

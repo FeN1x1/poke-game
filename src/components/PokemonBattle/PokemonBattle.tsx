@@ -1,10 +1,12 @@
 import { useState } from "react"
-import { useStore, PokemonInfo } from "../../store/pokemonStore"
+import { useRouter } from "next/router"
+import { useStore } from "../../store/refactoredPokemonStore"
+import { PlayerPokemons, PokemonInfo } from "../../types"
 import PokemonSelect from "./PokemonSelect"
 
 const selectedPokemonsUndefined = {
-  firstPlayerPokemon: undefined,
-  secondPlayerPokemon: undefined,
+  firstPlayer: undefined,
+  secondPlayer: undefined,
 }
 
 const PokemonBattle = () => {
@@ -13,69 +15,53 @@ const PokemonBattle = () => {
   const [secondPlayerSelectedPokemonId, setSecondPlayerSelectedPokemonId] =
     useState<number | undefined>()
   const [selectedPokemons, setSelectedPokemons] = useState<{
-    firstPlayerPokemon: PokemonInfo | undefined
-    secondPlayerPokemon: PokemonInfo | undefined
+    firstPlayer: PokemonInfo | undefined
+    secondPlayer: PokemonInfo | undefined
   }>(selectedPokemonsUndefined)
 
-  const getFirstPlayerPokemons = useStore((state) => state.firstPlayerPokemons)
-
-  const getSecondPlayerPokemons = useStore(
-    (state) => state.secondPlayerPokemons
+  const getPlayerPokemons = useStore((state) => state.playerPokemons)
+  const router = useRouter()
+  const deletePokemonFromPlayer = useStore(
+    (state) => state.deletePokemonFromPlayer
   )
 
-  const deletePokemonFromFirstPlayer = useStore(
-    (state) => state.deletePokemonFromFirstPlayer
-  )
-
-  const deletePokemonFromSecondPlayer = useStore(
-    (state) => state.deletePokemonFromSecondPlayer
-  )
-
-  const chooseFirstPlayerPokemon = () => {
-    const selectedPokemon = getFirstPlayerPokemons.find(
-      (p) => p.pokemonId === firstPlayerSelectedPokemonId
-    )
-    deletePokemonFromFirstPlayer(firstPlayerSelectedPokemonId)
-    console.log("test")
-  }
-
-  const chooseSecondPlayerPokemon = () => {
-    const selectedPokemon = getSecondPlayerPokemons.find(
-      (p) => p.pokemonId === secondPlayerSelectedPokemonId
-    )
+  const choosePlayerPokemon = (player: keyof PlayerPokemons) => {
+    const selectedPlayerPokemon =
+      player === "firstPlayer"
+        ? firstPlayerSelectedPokemonId
+        : secondPlayerSelectedPokemonId
     setSelectedPokemons({
       ...selectedPokemons,
-      secondPlayerPokemon: selectedPokemon,
+      [player]: getPlayerPokemons[player].find(
+        (p) => p.pokemonId === selectedPlayerPokemon
+      ),
     })
-    deletePokemonFromSecondPlayer(secondPlayerSelectedPokemonId)
+    deletePokemonFromPlayer(player, selectedPlayerPokemon)
   }
 
-  if (
-    selectedPokemons.firstPlayerPokemon &&
-    selectedPokemons.secondPlayerPokemon
-  ) {
-    console.log("done")
+  if (selectedPokemons.firstPlayer && selectedPokemons.secondPlayer) {
     setSelectedPokemons(selectedPokemonsUndefined)
+    router.push("/pokemon-battle/round")
   }
 
   return (
     <div className="p-8 h-screen flex flex-col justify-between">
       <div className="transform rotate-180">
-        {" "}
         <PokemonSelect
           selectedPokemon={firstPlayerSelectedPokemonId}
           selectPokemon={setFirstPlayerSelectedPokemonId}
-          pokemons={getFirstPlayerPokemons}
-          choosePokemon={chooseFirstPlayerPokemon}
+          pokemons={getPlayerPokemons.firstPlayer}
+          choosePokemon={() => choosePlayerPokemon("firstPlayer")}
         />
       </div>
-
-      <PokemonSelect
-        selectedPokemon={secondPlayerSelectedPokemonId}
-        selectPokemon={setSecondPlayerSelectedPokemonId}
-        pokemons={getSecondPlayerPokemons}
-        choosePokemon={chooseSecondPlayerPokemon}
-      />
+      <div>
+        <PokemonSelect
+          selectedPokemon={secondPlayerSelectedPokemonId}
+          selectPokemon={setSecondPlayerSelectedPokemonId}
+          pokemons={getPlayerPokemons.secondPlayer}
+          choosePokemon={() => choosePlayerPokemon("secondPlayer")}
+        />
+      </div>
     </div>
   )
 }

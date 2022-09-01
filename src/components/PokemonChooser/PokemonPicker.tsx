@@ -1,26 +1,22 @@
 import PokemonItem from "./PokemonItem"
 import { generateRandomNumber } from "../../utils/rnd-number"
 import { useState } from "react"
-import { useStore } from "../../store/pokemonStore"
+import { useStore } from "../../store/refactoredPokemonStore"
 import { useRouter } from "next/router"
 
-const PokemonPicker = () => {
+const PokemonPicker: React.FC = () => {
   const [firstPokemonId, setFirstPokemonId] =
     useState<number>(generateRandomNumber)
   const [secondPokemonId, setSecondPokemonId] =
     useState<number>(generateRandomNumber)
 
-  const getFirstPlayerPokemons = useStore((state) => state.firstPlayerPokemons)
-
-  const getSecondPlayerPokemons = useStore(
-    (state) => state.secondPlayerPokemons
-  )
+  const getPlayerPokemons = useStore((state) => state.playerPokemons)
 
   const router = useRouter()
-  const firstPlayerPokemonsCount = getFirstPlayerPokemons.length
-  const secondPlayerPokemonsCount = getSecondPlayerPokemons.length
+  const firstPlayerPokemonsLength = getPlayerPokemons.firstPlayer.length
+  const secondPlayerPokemonsLength = getPlayerPokemons.secondPlayer.length
 
-  if (firstPlayerPokemonsCount === 5 && secondPlayerPokemonsCount === 5) {
+  if (firstPlayerPokemonsLength === 5 && secondPlayerPokemonsLength === 5) {
     router.push("/pokemon-battle")
   }
 
@@ -28,17 +24,17 @@ const PokemonPicker = () => {
     <div className="flex flex-col h-screen">
       <div className="rotate-180">
         <PokemonItem
-          player
+          player="firstPlayer"
           pokemonId={firstPokemonId}
-          chosenNumber={firstPlayerPokemonsCount}
+          chosenNumber={firstPlayerPokemonsLength}
           generatePokemon={() => setFirstPokemonId(generateRandomNumber)}
         />
       </div>
       <div className="mt-auto">
         <PokemonItem
-          player={false}
+          player="secondPlayer"
           pokemonId={secondPokemonId}
-          chosenNumber={secondPlayerPokemonsCount}
+          chosenNumber={secondPlayerPokemonsLength}
           generatePokemon={() => setSecondPokemonId(generateRandomNumber)}
         />
       </div>
