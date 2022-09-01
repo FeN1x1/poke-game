@@ -13,7 +13,7 @@ const PokemonType: React.FC<{ pokemonTypes: PokemonType[] }> = ({
               key={index}
               className={`${pokemonTypesMap.get(
                 t.type.name
-              )} font-semibold py-1 px-3 rounded-full`}
+              )} font-semibold my-auto py-1 px-3 rounded-full`}
             >
               {t.type.name}
             </div>
