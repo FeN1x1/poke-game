@@ -1,13 +1,15 @@
-export const generateRandomFirstGenPokemonIds = () => {
-  const firstNumber = generateRandomNumber()
-  let secondNumber = generateRandomNumber()
+import { PlayerPokemons, PokemonInfo } from "../types"
 
-  do {
-    secondNumber = generateRandomNumber()
-  } while (firstNumber === secondNumber)
-  return [firstNumber, secondNumber]
+export const generateRandomNumber = (pokeGeneration: number) => {
+  return Math.floor(Math.random() * pokeGeneration + 1)
 }
 
-export const generateRandomNumber = () => {
-  return Math.floor(Math.random() * 150 + 1)
+export const generateRandomNumberForPlayer = (generatedPokemons: number[]) => {
+  let generatedPokemon = generateRandomNumber(150)
+
+  do {
+    generatedPokemon = generateRandomNumber(150)
+  } while (generatedPokemons.includes(generatedPokemon))
+
+  return generatedPokemon
 }

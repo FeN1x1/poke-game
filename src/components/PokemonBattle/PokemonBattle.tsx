@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
-import { useStore } from "../../store/refactoredPokemonStore"
-import { PlayerPokemons, PokemonInfo } from "../../types"
+import { useStore } from "../../store/pokemonStore"
+import { Player, PlayerPokemons, PokemonInfo } from "../../types"
 import PokemonSelect from "./PokemonSelect"
 
 const selectedPokemonsUndefined = {
@@ -27,7 +27,7 @@ const PokemonBattle = () => {
 
   const choosePlayerPokemon = (player: keyof PlayerPokemons) => {
     const selectedPlayerPokemon =
-      player === "firstPlayer"
+      player === Player.first
         ? firstPlayerSelectedPokemonId
         : secondPlayerSelectedPokemonId
     setSelectedPokemons({
@@ -51,7 +51,7 @@ const PokemonBattle = () => {
           selectedPokemon={firstPlayerSelectedPokemonId}
           selectPokemon={setFirstPlayerSelectedPokemonId}
           pokemons={getPlayerPokemons.firstPlayer}
-          choosePokemon={() => choosePlayerPokemon("firstPlayer")}
+          choosePokemon={() => choosePlayerPokemon(Player.first)}
         />
       </div>
       <div>
@@ -59,7 +59,7 @@ const PokemonBattle = () => {
           selectedPokemon={secondPlayerSelectedPokemonId}
           selectPokemon={setSecondPlayerSelectedPokemonId}
           pokemons={getPlayerPokemons.secondPlayer}
-          choosePokemon={() => choosePlayerPokemon("secondPlayer")}
+          choosePokemon={() => choosePlayerPokemon(Player.second)}
         />
       </div>
     </div>

@@ -1,6 +1,5 @@
-import { PokemonInfo } from "../../store/pokemonStore"
+import { PokemonInfo } from "../../types"
 import { Radio, Button, List, ListItem } from "konsta/react"
-import { PlayerPokemons } from "../../types"
 
 const PokemonSelect: React.FC<{
   selectedPokemon: number | undefined

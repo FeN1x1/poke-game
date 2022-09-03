@@ -33,3 +33,5 @@ export const introSlides = [
     imageAlt: "Bulbasaur",
   },
 ]
+
+

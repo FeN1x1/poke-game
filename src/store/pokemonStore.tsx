@@ -1,56 +1,33 @@
 import create from "zustand"
-
-interface PokemonSets {
-  firstPlayerPokemons: PokemonInfo[]
-  secondPlayerPokemons: PokemonInfo[]
-  addPokemonToFirstPlayer: (pokemonId: number, pokemonName: string) => void
-  addPokemonToSecondPlayer: (pokemonId: number, pokemonName: string) => void
-  deletePokemonFromFirstPlayer: (pokemonId: number | undefined) => void
-  deletePokemonFromSecondPlayer: (pokemonId: number | undefined) => void
-}
-
-export type PokemonInfo = {
-  pokemonId: number
-  pokemonName: string
-}
+import { PokemonSets } from "../types"
 
 export const useStore = create<PokemonSets>((set) => ({
-  firstPlayerPokemons: [],
-  secondPlayerPokemons: [],
-  addPokemonToFirstPlayer: (pokemonId, pokemonName) => {
+  playerPokemons: {
+    firstPlayer: [],
+    secondPlayer: [],
+  },
+  addPokemonToPlayer: (player, pokemonId, pokemonName) => {
     set((state) => ({
-      firstPlayerPokemons: [
-        ...state.firstPlayerPokemons,
-        {
-          pokemonId,
-          pokemonName,
-        },
-      ],
+      playerPokemons: {
+        ...state.playerPokemons,
+        [player]: [
+          ...state.playerPokemons[player],
+          {
+            pokemonId,
+            pokemonName,
+          },
+        ],
+      },
     }))
   },
-  addPokemonToSecondPlayer: (pokemonId, pokemonName) => {
+  deletePokemonFromPlayer: (player, pokemonId) => {
     set((state) => ({
-      secondPlayerPokemons: [
-        ...state.secondPlayerPokemons,
-        {
-          pokemonId,
-          pokemonName,
-        },
-      ],
-    }))
-  },
-  deletePokemonFromFirstPlayer: (pokemonId) => {
-    set((state) => ({
-      firstPlayerPokemons: state.firstPlayerPokemons.filter(
-        (p) => p.pokemonId !== pokemonId
-      ),
-    }))
-  },
-  deletePokemonFromSecondPlayer: (pokemonId) => {
-    set((state) => ({
-      secondPlayerPokemons: state.secondPlayerPokemons.filter(
-        (p) => p.pokemonId !== pokemonId
-      ),
+      playerPokemons: {
+        ...state.playerPokemons,
+        [player]: state.playerPokemons[player].filter(
+          (p) => p.pokemonId !== pokemonId
+        ),
+      },
     }))
   },
 }))

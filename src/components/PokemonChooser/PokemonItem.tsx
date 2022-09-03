@@ -3,11 +3,14 @@ import { Card, Button } from "konsta/react"
 import { PlayerPokemons, Pokemon } from "../../types"
 import { pokemonTypesMap } from "../../types/staticData"
 import PokemonType from "../PokemonType"
-import { useStore } from "../../store/refactoredPokemonStore"
+import { useStore } from "../../store/pokemonStore"
 import { Haptics, ImpactStyle } from "@capacitor/haptics"
 import autoAnimate from "@formkit/auto-animate"
 import { useRef, useEffect } from "react"
-import PokemonAllChosen from "../PokemonAllChosen"
+import PokemonChose from "../PokemonChosenStatus"
+
+const pokemonChosenText =
+  "You've chosen all 5 pokemons. Please wait for other player to choose theirs"
 
 const PokemonItem: React.FC<{
   player: keyof PlayerPokemons
@@ -41,7 +44,7 @@ const PokemonItem: React.FC<{
 
   const areAllPokemonsChosen = () => {
     if (chosenNumber === 5) {
-      return <PokemonAllChosen />
+      return <PokemonChose text={pokemonChosenText} />
     }
     return (
       <div ref={pokemonCardRef}>

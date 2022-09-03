@@ -21,6 +21,13 @@ export type PokemonType = {
   }
 }
 
+export enum Player {
+  first = "firstPlayer",
+  second = "secondPlayer",
+}
+
+//pokemon store
+
 export interface PokemonSets {
   playerPokemons: PlayerPokemons
   addPokemonToPlayer: (
