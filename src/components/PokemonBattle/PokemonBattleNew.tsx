@@ -9,21 +9,30 @@ const PokemonBattleNew = () => {
   const [selectedPlayerPokemon, setSelectedPlayerPokemon] = useState<
     number | undefined
   >()
-  const getPlayerPokemons = useStore((state) => state.playerPokemons)
-  const selectPokemon = (pokemonId: number) => {
-    setSelectedPlayerPokemon(pokemonId)
-  }
   const [chosenPlayer, setChosenPlayer] = useState<Player>(Player.first)
   const [isAlreadyChosenPlayer, setIsAlreadyChosenPlayer] =
     useState<boolean>(false)
+
+  const getPlayerPokemons = useStore((state) => state.playerPokemons)
   const router = useRouter()
+
+  const selectPokemon = (pokemonId: number) => {
+    setSelectedPlayerPokemon(pokemonId)
+  }
 
   const firstPlayerToChoosePokemons = useStore(
     (state) => state.firstToChoosePokemonToBattle
   )
+  const deletePokemonFromPlayer = useStore(
+    (state) => state.deletePokemonFromPlayer
+  )
 
   const choosePokemon = () => {
-    router.push("/pokemon-battle")
+    deletePokemonFromPlayer(chosenPlayer, selectedPlayerPokemon)
+    setSelectedPlayerPokemon(undefined)
+    setChosenPlayer(
+      chosenPlayer === Player.first ? Player.second : Player.first
+    )
   }
 
   if (firstPlayerToChoosePokemons === Player.first && !isAlreadyChosenPlayer) {
@@ -39,7 +48,7 @@ const PokemonBattleNew = () => {
 
   return (
     <Page>
-      <Navbar title="Player pokemon selection" />
+      <Navbar title={`${chosenPlayer}, select your pokemon`} />
 
       <BlockTitle>Available pokemon list</BlockTitle>
       <List>
