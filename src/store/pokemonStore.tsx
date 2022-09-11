@@ -1,11 +1,14 @@
 import create from "zustand"
-import { PokemonSets } from "../types"
+import { Player, PokemonSets } from "../types"
 
 export const useStore = create<PokemonSets>((set) => ({
   playerPokemons: {
     firstPlayer: [],
     secondPlayer: [],
   },
+  firstToChoosePokemonToBattle: null,
+  setFirstToChoosePokemonToBattle: (player) =>
+    set(() => ({ firstToChoosePokemonToBattle: player })),
   addPokemonToPlayer: (player, pokemonId, pokemonName) => {
     set((state) => ({
       playerPokemons: {

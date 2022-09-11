@@ -30,7 +30,7 @@ const PokemonSelect: React.FC<{
           <Button
             onClick={choosePokemon}
             outline
-            className="py-5 "
+            className="py-5"
             colors={{
               text: "text-red-500",
               border: "border-red-500",

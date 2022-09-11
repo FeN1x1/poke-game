@@ -20,6 +20,7 @@ const Swiper = () => {
             text={s.text}
             image={s.image}
             imageAlt={s.imageAlt}
+            toPokemonChooser={s.toPokemonChooser}
           />
         </SwiperSlide>
       ))}

@@ -3,8 +3,13 @@ import { generateRandomNumberForPlayer } from "../../utils/rnd-number"
 import { useState } from "react"
 import { useStore } from "../../store/pokemonStore"
 import { useRouter } from "next/router"
+import { Player } from "../../types"
 
-const PokemonPicker: React.FC = () => {
+const PokemonPicker = () => {
+  const [
+    isFirstPokemonChooserForBattleSet,
+    setIsFirstPokemonChooserForBattleSet,
+  ] = useState<Player>()
   const getPlayerPokemons = useStore((state) => state.playerPokemons)
   const router = useRouter()
 
@@ -28,6 +33,15 @@ const PokemonPicker: React.FC = () => {
     generateRandomNumberForPlayer(generatedPokemonsCombined())
   )
 
+  if (
+    (firstPlayerPokemonsLength === 5 || secondPlayerPokemonsLength === 5) &&
+    !isFirstPokemonChooserForBattleSet
+  ) {
+    setIsFirstPokemonChooserForBattleSet(
+      firstPlayerPokemonsLength === 5 ? Player.first : Player.second
+    )
+  }
+
   if (firstPlayerPokemonsLength === 5 && secondPlayerPokemonsLength === 5) {
     router.push("/pokemon-battle")
   }
@@ -36,7 +50,7 @@ const PokemonPicker: React.FC = () => {
     <div className="flex flex-col h-screen">
       <div className="rotate-180">
         <PokemonItem
-          player="firstPlayer"
+          player={Player.first}
           pokemonId={firstPokemonId}
           chosenNumber={firstPlayerPokemonsLength}
           generatePokemon={() =>
@@ -48,7 +62,7 @@ const PokemonPicker: React.FC = () => {
       </div>
       <div className="mt-auto">
         <PokemonItem
-          player="secondPlayer"
+          player={Player.second}
           pokemonId={secondPokemonId}
           chosenNumber={secondPlayerPokemonsLength}
           generatePokemon={() =>

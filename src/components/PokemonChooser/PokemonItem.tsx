@@ -1,19 +1,19 @@
 import { useQuery } from "react-query"
 import { Card, Button } from "konsta/react"
-import { PlayerPokemons, Pokemon } from "../../types"
+import { Player, PlayerPokemons, Pokemon } from "../../types"
 import { pokemonTypesMap } from "../../types/staticData"
 import PokemonType from "../PokemonType"
 import { useStore } from "../../store/pokemonStore"
 import { Haptics, ImpactStyle } from "@capacitor/haptics"
 import autoAnimate from "@formkit/auto-animate"
 import { useRef, useEffect } from "react"
-import PokemonChose from "../PokemonChosenStatus"
+import PokemonChose from "../PokemonPickStatus"
 
 const pokemonChosenText =
   "You've chosen all 5 pokemons. Please wait for other player to choose theirs"
 
 const PokemonItem: React.FC<{
-  player: keyof PlayerPokemons
+  player: Player
   pokemonId: number
   chosenNumber: number
   generatePokemon: () => void
@@ -32,9 +32,26 @@ const PokemonItem: React.FC<{
 
   const addPokemonToPlayer = useStore((state) => state.addPokemonToPlayer)
 
+  const firstPlayerToChoosePokemons = useStore(
+    (state) => state.firstToChoosePokemonToBattle
+  )
+  const setFirstPlayerToChoosePokemons = useStore(
+    (state) => state.setFirstToChoosePokemonToBattle
+  )
+
   useEffect(() => {
     pokemonCardRef.current && autoAnimate(pokemonCardRef.current)
   }, [pokemonCardRef])
+
+  useEffect(() => {
+    if (chosenNumber === 5) {
+      if (!firstPlayerToChoosePokemons) {
+        setFirstPlayerToChoosePokemons(
+          player === Player.first ? Player.second : Player.first
+        )
+      }
+    }
+  })
 
   const takePokemonAndSaveState = async (pokemonName: string) => {
     await Haptics.impact({ style: ImpactStyle.Medium })

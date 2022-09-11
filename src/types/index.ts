@@ -30,6 +30,8 @@ export enum Player {
 
 export interface PokemonSets {
   playerPokemons: PlayerPokemons
+  firstToChoosePokemonToBattle: Player | null
+  setFirstToChoosePokemonToBattle: (player: Player) => void
   addPokemonToPlayer: (
     player: keyof PlayerPokemons,
     pokemonId: number,
