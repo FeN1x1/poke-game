@@ -1,6 +1,4 @@
-import { PlayerPokemons, PokemonInfo } from "../types"
-
-export const generateRandomNumber = (pokeGeneration: number) => {
+const generateRandomNumber = (pokeGeneration: number) => {
   return Math.floor(Math.random() * pokeGeneration + 1)
 }
 

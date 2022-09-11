@@ -4,7 +4,7 @@ import type { NextPage } from "next"
 import PokemonBattleResult from "../../components/PokemonBattle/PokemonBattleResult"
 
 const Round: NextPage = () => {
-  return <Page><PokemonBattleResult /></Page>
+  return <Page><PokemonBattleResult/></Page>
 }
 
 export default Round

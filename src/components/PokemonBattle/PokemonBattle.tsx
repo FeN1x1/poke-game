@@ -1,68 +1,81 @@
 import { useState } from "react"
-import { useRouter } from "next/router"
-import { useStore } from "../../store/pokemonStore"
-import { Player, PlayerPokemons, PokemonInfo } from "../../types"
+import { Page, Navbar, BlockTitle, List } from "konsta/react"
 import PokemonSelect from "./PokemonSelect"
-
-const selectedPokemonsUndefined = {
-  firstPlayer: undefined,
-  secondPlayer: undefined,
-}
+import { useStore } from "../../store/pokemonStore"
+import { Player } from "../../types"
+import { useRouter } from "next/router"
 
 const PokemonBattle = () => {
-  const [firstPlayerSelectedPokemonId, setFirstPlayerSelectedPokemonId] =
-    useState<number | undefined>()
-  const [secondPlayerSelectedPokemonId, setSecondPlayerSelectedPokemonId] =
-    useState<number | undefined>()
-  const [selectedPokemons, setSelectedPokemons] = useState<{
-    firstPlayer: PokemonInfo | undefined
-    secondPlayer: PokemonInfo | undefined
-  }>(selectedPokemonsUndefined)
+  const [selectedPlayerPokemon, setSelectedPlayerPokemon] = useState<
+    number | null
+  >(null)
+  const [chosenPlayer, setChosenPlayer] = useState<Player>(Player.first)
+  const [isAlreadyChosenPlayer, setIsAlreadyChosenPlayer] =
+    useState<boolean>(false)
 
   const getPlayerPokemons = useStore((state) => state.playerPokemons)
   const router = useRouter()
+
+  const selectPokemon = (pokemonId: number) => {
+    setSelectedPlayerPokemon(pokemonId)
+  }
+
+  const playerChoosingPokemons = useStore(
+    (state) => state.playerChoosingPokemons
+  )
   const deletePokemonFromPlayer = useStore(
     (state) => state.deletePokemonFromPlayer
   )
 
-  const choosePlayerPokemon = (player: keyof PlayerPokemons) => {
-    const selectedPlayerPokemon =
-      player === Player.first
-        ? firstPlayerSelectedPokemonId
-        : secondPlayerSelectedPokemonId
-    setSelectedPokemons({
-      ...selectedPokemons,
-      [player]: getPlayerPokemons[player].find(
-        (p) => p.pokemonId === selectedPlayerPokemon
-      ),
-    })
-    deletePokemonFromPlayer(player, selectedPlayerPokemon)
+  const battleState = useStore((state) => state.battleState)
+
+  const selectPokemonForBattle = useStore(
+    (state) => state.selectPokemonForBattle
+  )
+
+  const choosePokemon = () => {
+    selectPokemonForBattle(chosenPlayer, selectedPlayerPokemon)
+    deletePokemonFromPlayer(chosenPlayer, selectedPlayerPokemon)
+    setSelectedPlayerPokemon(null)
+    setChosenPlayer(
+      chosenPlayer === Player.first ? Player.second : Player.first
+    )
+    console.log(
+      battleState.firstPlayer.pokemonId,
+      battleState.secondPlayer.pokemonId
+    )
+    if (
+      battleState.firstPlayer.pokemonId != null &&
+      battleState.secondPlayer.pokemonId != null
+    )
+      router.push("/pokemon-battle/round")
   }
 
-  if (selectedPokemons.firstPlayer && selectedPokemons.secondPlayer) {
-    setSelectedPokemons(selectedPokemonsUndefined)
-    router.push("/pokemon-battle/round")
+  if (playerChoosingPokemons === Player.first && !isAlreadyChosenPlayer) {
+    setIsAlreadyChosenPlayer(true)
+    setChosenPlayer(Player.first)
+  } else if (
+    playerChoosingPokemons === Player.second &&
+    !isAlreadyChosenPlayer
+  ) {
+    setIsAlreadyChosenPlayer(true)
+    setChosenPlayer(Player.second)
   }
 
   return (
-    <div className="p-8 h-screen flex flex-col justify-between">
-      <div className="transform rotate-180">
+    <Page>
+      <Navbar title={`${chosenPlayer}, select your pokemon`} />
+
+      <BlockTitle>Available pokemon list</BlockTitle>
+      <List>
         <PokemonSelect
-          selectedPokemon={firstPlayerSelectedPokemonId}
-          selectPokemon={setFirstPlayerSelectedPokemonId}
-          pokemons={getPlayerPokemons.firstPlayer}
-          choosePokemon={() => choosePlayerPokemon(Player.first)}
+          pokemons={getPlayerPokemons[chosenPlayer]}
+          selectedPokemon={selectedPlayerPokemon}
+          selectPokemon={selectPokemon}
+          choosePokemon={choosePokemon}
         />
-      </div>
-      <div>
-        <PokemonSelect
-          selectedPokemon={secondPlayerSelectedPokemonId}
-          selectPokemon={setSecondPlayerSelectedPokemonId}
-          pokemons={getPlayerPokemons.secondPlayer}
-          choosePokemon={() => choosePlayerPokemon(Player.second)}
-        />
-      </div>
-    </div>
+      </List>
+    </Page>
   )
 }
 

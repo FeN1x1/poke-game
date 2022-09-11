@@ -1,6 +1,6 @@
 import { useQuery } from "react-query"
 import { Card, Button } from "konsta/react"
-import { Player, PlayerPokemons, Pokemon } from "../../types"
+import { Player, Pokemon } from "../../types"
 import { pokemonTypesMap } from "../../types/staticData"
 import PokemonType from "../PokemonType"
 import { useStore } from "../../store/pokemonStore"
@@ -32,11 +32,11 @@ const PokemonItem: React.FC<{
 
   const addPokemonToPlayer = useStore((state) => state.addPokemonToPlayer)
 
-  const firstPlayerToChoosePokemons = useStore(
-    (state) => state.firstToChoosePokemonToBattle
+  const playerChoosingPokemons = useStore(
+    (state) => state.playerChoosingPokemons
   )
-  const setFirstPlayerToChoosePokemons = useStore(
-    (state) => state.setFirstToChoosePokemonToBattle
+  const setPlayerChoosingPokemons = useStore(
+    (state) => state.setPlayerChoosingPokemons
   )
 
   useEffect(() => {
@@ -45,8 +45,8 @@ const PokemonItem: React.FC<{
 
   useEffect(() => {
     if (chosenNumber === 5) {
-      if (!firstPlayerToChoosePokemons) {
-        setFirstPlayerToChoosePokemons(
+      if (!playerChoosingPokemons) {
+        setPlayerChoosingPokemons(
           player === Player.first ? Player.second : Player.first
         )
       }

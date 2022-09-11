@@ -6,13 +6,7 @@ import Slide from "./Slide"
 
 const Swiper = () => {
   return (
-    <SwiperReact
-      className="h-full"
-      spaceBetween={50}
-      slidesPerView={1}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}
-    >
+    <SwiperReact className="h-full" spaceBetween={50} slidesPerView={1}>
       {introSlides.map((s) => (
         <SwiperSlide key={s.title} className="block">
           <Slide

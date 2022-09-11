@@ -6,9 +6,30 @@ export const useStore = create<PokemonSets>((set) => ({
     firstPlayer: [],
     secondPlayer: [],
   },
-  firstToChoosePokemonToBattle: null,
-  setFirstToChoosePokemonToBattle: (player) =>
-    set(() => ({ firstToChoosePokemonToBattle: player })),
+  playerChoosingPokemons: null,
+  battleState: {
+    firstPlayer: {
+      pokemonId: null,
+      points: 0,
+    },
+    secondPlayer: {
+      pokemonId: null,
+      points: 0,
+    },
+    isInBattle: false,
+  },
+  setPlayerChoosingPokemons: (player) =>
+    set(() => ({ playerChoosingPokemons: player })),
+  selectPokemonForBattle: (player, pokemonId) =>
+    set((state) => ({
+      battleState: {
+        ...state.battleState,
+        [player]: {
+          ...state.battleState[player],
+          pokemonId: pokemonId,
+        },
+      },
+    })),
   addPokemonToPlayer: (player, pokemonId, pokemonName) => {
     set((state) => ({
       playerPokemons: {

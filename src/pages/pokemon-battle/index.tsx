@@ -1,12 +1,12 @@
 // Konsta UI components
 import { Page } from "konsta/react"
 import type { NextPage } from "next"
-import PokemonBattleNew from "../../components/PokemonBattle/PokemonBattleNew"
+import { default as PokemonBattleComponent } from "../../components/PokemonBattle/PokemonBattle"
 
 const PokemonBattle: NextPage = () => {
   return (
     <Page>
-      <PokemonBattleNew />
+      <PokemonBattleComponent />
     </Page>
   )
 }

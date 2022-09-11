@@ -2,7 +2,7 @@ import { PokemonInfo } from "../../types"
 import { Radio, Button, List, ListItem } from "konsta/react"
 
 const PokemonSelect: React.FC<{
-  selectedPokemon: number | undefined
+  selectedPokemon: number | null
   selectPokemon: (pokemonId: number) => void
   pokemons: PokemonInfo[]
   choosePokemon: () => void

@@ -30,8 +30,10 @@ export enum Player {
 
 export interface PokemonSets {
   playerPokemons: PlayerPokemons
-  firstToChoosePokemonToBattle: Player | null
-  setFirstToChoosePokemonToBattle: (player: Player) => void
+  playerChoosingPokemons: Player | null
+  battleState: BattleState
+  selectPokemonForBattle: (player: Player, pokemonId: number | null) => void
+  setPlayerChoosingPokemons: (player: Player) => void
   addPokemonToPlayer: (
     player: keyof PlayerPokemons,
     pokemonId: number,
@@ -39,7 +41,7 @@ export interface PokemonSets {
   ) => void
   deletePokemonFromPlayer: (
     player: keyof PlayerPokemons,
-    pokemonId: number | undefined
+    pokemonId: number | null
   ) => void
 }
 
@@ -51,4 +53,15 @@ export type PlayerPokemons = {
 export type PokemonInfo = {
   pokemonId: number
   pokemonName: string
+}
+
+type BattleState = {
+  firstPlayer: PlayerBattleState
+  secondPlayer: PlayerBattleState
+  isInBattle: boolean
+}
+
+type PlayerBattleState = {
+  pokemonId: number | null
+  points: number
 }

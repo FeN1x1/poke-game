@@ -1,5 +1,5 @@
 import PokemonItem from "./PokemonItem"
-import { generateRandomNumberForPlayer } from "../../utils/rnd-number"
+import { generateRandomNumberForPlayer } from "../../utils/rndNumber"
 import { useState } from "react"
 import { useStore } from "../../store/pokemonStore"
 import { useRouter } from "next/router"
