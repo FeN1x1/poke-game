@@ -1,6 +1,6 @@
-import { useQuery, useQueryClient } from "react-query"
+// import { useQuery, useQueryClient } from "react-query"
 import { useStore } from "../../store/pokemonStore"
-import { useGetFetchQuery } from "../hooks/useGetFetchQuery"
+// import { useGetFetchQuery } from "../hooks/useGetFetchQuery"
 import { Player, Pokemon } from "../../types"
 import { useGetPokemon } from "../hooks/useGetPokemon"
 import { useEffect, useState } from "react"
@@ -25,6 +25,9 @@ const PokemonBattleResult = () => {
   const removePlayersChoosingPokemons = useStore(
     (state) => state.removePlayersChoosingPokemons
   )
+  const setPlayerChoosingPokemons = useStore(
+    (state) => state.setPlayerChoosingPokemons
+  )
 
   useEffect(() => {
     const timer =
@@ -32,29 +35,55 @@ const PokemonBattleResult = () => {
     return () => clearInterval(timer)
   }, [counter])
 
-  const battleResults = (p1Stats: number, p2Stats: number) => {
+  useEffect(() => {
+    if (firstPlayerPokemon && secondPlayerPokemon) {
+      if (
+        firstPlayerPokemon.base_experience > secondPlayerPokemon.base_experience
+      ) {
+        setPlayerWinningRound(Player.first)
+      } else if (
+        secondPlayerPokemon.base_experience > firstPlayerPokemon.base_experience
+      ) {
+        setPlayerWinningRound(Player.second)
+      } else {
+        setPlayerWinningRound(Player.first)
+        setPlayerWinningRound(Player.second)
+      }
+    }
+  }, [firstPlayerPokemon, secondPlayerPokemon])
+
+  const battleResults = () => {
     let statement = ""
-    if (p1Stats > p2Stats) {
+    if (playerWinningRound === Player.first) {
       statement += "First"
-      setPlayerWinningRound(Player.first)
     }
-    if (p2Stats > p1Stats) {
+    if (playerWinningRound === Player.second) {
       statement += "Second"
-      setPlayerWinningRound(Player.first)
     }
-    if (p2Stats === p1Stats) {
-      setPlayerWinningRound(Player.first)
-      setPlayerWinningRound(Player.second)
-      return "It's a tie! Both players get a point"
-    }
+    // if (p2Stats === p1Stats) {
+    //   return "It's a tie! Both players get a point"
+    // }
     statement += " player won the round and get's a point!"
     return statement
   }
 
-  if (counter === 0) {
+  const calculatePlayerWinningCurrentRound = () => {}
+
+  if (counter === 0 && battleState.firstPlayer.pokemonId !== null) {
     toggleBattleState()
     removePlayersChoosingPokemons()
+    setPlayerChoosingPokemons(playerWinningRound)
     router.push("/pokemon-battle")
+  }
+
+  if (
+    battleState.firstPlayer.points === 3 ||
+    battleState.secondPlayer.points === 3
+  ) {
+    router.push({
+      pathname: "/pokemon-battle/winner/[player]",
+      query: { player: playerWinningRound },
+    })
   }
 
   return (
@@ -71,12 +100,7 @@ const PokemonBattleResult = () => {
             <div className="capitalize">{`${secondPlayerPokemon.name}: ${secondPlayerPokemon.base_experience}`}</div>
           </div>
           <div className="my-8"></div>
-          <div>
-            {battleResults(
-              secondPlayerPokemon.base_experience,
-              firstPlayerPokemon.base_experience
-            )}
-          </div>
+          <div>{battleResults()}</div>
           Next round in: {counter}
         </>
       )}
