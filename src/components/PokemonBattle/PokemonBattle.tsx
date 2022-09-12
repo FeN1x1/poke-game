@@ -26,9 +26,8 @@ const PokemonBattle = () => {
   const deletePokemonFromPlayer = useStore(
     (state) => state.deletePokemonFromPlayer
   )
-
+  const toggleBattleState = useStore((state) => state.toggleBattleState)
   const battleState = useStore((state) => state.battleState)
-
   const selectPokemonForBattle = useStore(
     (state) => state.selectPokemonForBattle
   )
@@ -40,15 +39,14 @@ const PokemonBattle = () => {
     setChosenPlayer(
       chosenPlayer === Player.first ? Player.second : Player.first
     )
-    console.log(
-      battleState.firstPlayer.pokemonId,
-      battleState.secondPlayer.pokemonId
-    )
-    if (
-      battleState.firstPlayer.pokemonId != null &&
-      battleState.secondPlayer.pokemonId != null
-    )
-      router.push("/pokemon-battle/round")
+    toggleBattleState()
+  }
+
+  if (
+    battleState.firstPlayer.pokemonId !== null &&
+    battleState.secondPlayer.pokemonId !== null
+  ) {
+    router.push("/pokemon-battle/round")
   }
 
   if (playerChoosingPokemons === Player.first && !isAlreadyChosenPlayer) {

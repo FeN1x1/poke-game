@@ -30,6 +30,40 @@ export const useStore = create<PokemonSets>((set) => ({
         },
       },
     })),
+  addPointToPlayer: (player) =>
+    set((state) => ({
+      battleState: {
+        ...state.battleState,
+        [player]: {
+          ...state.battleState[player],
+          points: state.battleState[player].points + 1,
+        },
+      },
+    })),
+  removePlayersChoosingPokemons: () => {
+    set((state) => ({
+      battleState: {
+        ...state.battleState,
+        firstPlayer: {
+          ...state.battleState.firstPlayer,
+          pokemonId: null,
+        },
+        secondPlayer: {
+          ...state.battleState.secondPlayer,
+          pokemonId: null,
+        },
+      },
+    }))
+  },
+  toggleBattleState: () => {
+    set((state) => ({
+      battleState: {
+        ...state.battleState,
+        isInBattle: (state.battleState.isInBattle =
+          !state.battleState.isInBattle),
+      },
+    }))
+  },
   addPokemonToPlayer: (player, pokemonId, pokemonName) => {
     set((state) => ({
       playerPokemons: {

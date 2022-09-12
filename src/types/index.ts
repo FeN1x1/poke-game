@@ -33,7 +33,10 @@ export interface PokemonSets {
   playerChoosingPokemons: Player | null
   battleState: BattleState
   selectPokemonForBattle: (player: Player, pokemonId: number | null) => void
+  addPointToPlayer: (player: Player) => void
   setPlayerChoosingPokemons: (player: Player) => void
+  removePlayersChoosingPokemons: () => void
+  toggleBattleState: () => void
   addPokemonToPlayer: (
     player: keyof PlayerPokemons,
     pokemonId: number,

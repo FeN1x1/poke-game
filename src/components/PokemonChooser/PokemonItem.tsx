@@ -8,6 +8,7 @@ import { Haptics, ImpactStyle } from "@capacitor/haptics"
 import autoAnimate from "@formkit/auto-animate"
 import { useRef, useEffect } from "react"
 import PokemonChose from "../PokemonPickStatus"
+import { useGetPokemon } from "../hooks/useGetPokemon"
 
 const pokemonChosenText =
   "You've chosen all 5 pokemons. Please wait for other player to choose theirs"
@@ -20,15 +21,17 @@ const PokemonItem: React.FC<{
 }> = ({ player, pokemonId, chosenNumber, generatePokemon }) => {
   const pokemonCardRef = useRef(null)
 
-  const fetchPokemon = async (number: number): Promise<Pokemon> => {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${number}`)
-    return await response.json()
-  }
-  const { data, error, status } = useQuery(
-    ["pokemon", pokemonId],
-    () => fetchPokemon(pokemonId),
-    { staleTime: Infinity }
-  )
+  const { data, error, status } = useGetPokemon(pokemonId)
+
+  // const fetchPokemon = async (number: number): Promise<Pokemon> => {
+  //   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${number}`)
+  //   return await response.json()
+  // }
+  // const { data, error, status } = useQuery(
+  //   ["pokemon", pokemonId],
+  //   () => fetchPokemon(pokemonId),
+  //   { staleTime: Infinity }
+  // )
 
   const addPokemonToPlayer = useStore((state) => state.addPokemonToPlayer)
 
