@@ -28,6 +28,7 @@ const PokemonBattleResult = () => {
   const setPlayerChoosingPokemons = useStore(
     (state) => state.setPlayerChoosingPokemons
   )
+  const addPointToPlayer = useStore((state) => state.addPointToPlayer)
 
   useEffect(() => {
     const timer =
@@ -44,9 +45,6 @@ const PokemonBattleResult = () => {
       } else if (
         secondPlayerPokemon.base_experience > firstPlayerPokemon.base_experience
       ) {
-        setPlayerWinningRound(Player.second)
-      } else {
-        setPlayerWinningRound(Player.first)
         setPlayerWinningRound(Player.second)
       }
     }
@@ -73,6 +71,18 @@ const PokemonBattleResult = () => {
     toggleBattleState()
     removePlayersChoosingPokemons()
     setPlayerChoosingPokemons(playerWinningRound)
+    if (
+      secondPlayerPokemon?.base_experience ===
+      firstPlayerPokemon?.base_experience
+    ) {
+      addPointToPlayer(Player.first)
+      addPointToPlayer(Player.second)
+    } else {
+      if (playerWinningRound) {
+        addPointToPlayer(playerWinningRound)
+      }
+    }
+
     router.push("/pokemon-battle")
   }
 
