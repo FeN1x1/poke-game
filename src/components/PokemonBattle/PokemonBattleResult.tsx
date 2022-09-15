@@ -31,8 +31,10 @@ const PokemonBattleResult = () => {
   const addPointToPlayer = useStore((state) => state.addPointToPlayer)
 
   useEffect(() => {
-    const timer =
-      counter > 0 && setInterval(() => setCounter(counter - 1), 1000)
+    let timer = 0
+    if (counter > 0) {
+      let timer = setInterval(() => setCounter(counter - 1), 1000)
+    }
     return () => clearInterval(timer)
   }, [counter])
 

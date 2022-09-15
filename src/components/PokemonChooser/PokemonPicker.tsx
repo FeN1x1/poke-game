@@ -3,7 +3,7 @@ import { generateRandomNumberForPlayer } from "../../utils/rndNumber"
 import { useState } from "react"
 import { useStore } from "../../store/pokemonStore"
 import { useRouter } from "next/router"
-import { Player } from "../../types"
+import { Player, PokemonType } from "../../types"
 
 const PokemonPicker = () => {
   const [
@@ -16,21 +16,33 @@ const PokemonPicker = () => {
   const firstPlayerPokemonsLength = getPlayerPokemons.firstPlayer.length
   const secondPlayerPokemonsLength = getPlayerPokemons.secondPlayer.length
 
-  const generatedPokemonsCombined = () => {
+  /*generate random pokemon that isn't already in array of picked
+  pokemons or isn't already showed on screen as a possible pokemon to pick */
+  const generatedPokemonsCombined = (): number[] => {
     const firstPlayerPokemons = getPlayerPokemons.firstPlayer.map(
       (p) => p.pokemonId
     )
     const secondPlayerPokemons = getPlayerPokemons.secondPlayer.map(
       (p) => p.pokemonId
     )
+
+    if (firstPokemonId !== null && secondPokemonId !== null) {
+      return [
+        ...firstPlayerPokemons,
+        ...secondPlayerPokemons,
+        firstPokemonId,
+        secondPokemonId,
+      ]
+    }
+
     return [...firstPlayerPokemons, ...secondPlayerPokemons]
   }
 
   const [firstPokemonId, setFirstPokemonId] = useState<number>(
-    generateRandomNumberForPlayer(generatedPokemonsCombined())
+    generateRandomNumberForPlayer([])
   )
   const [secondPokemonId, setSecondPokemonId] = useState<number>(
-    generateRandomNumberForPlayer(generatedPokemonsCombined())
+    generateRandomNumberForPlayer([])
   )
 
   if (
@@ -40,6 +52,10 @@ const PokemonPicker = () => {
     setIsFirstPokemonChooserForBattleSet(
       firstPlayerPokemonsLength === 5 ? Player.first : Player.second
     )
+  }
+
+  if (firstPokemonId === secondPokemonId) {
+    setSecondPokemonId(generateRandomNumberForPlayer([]))
   }
 
   if (firstPlayerPokemonsLength === 5 && secondPlayerPokemonsLength === 5) {

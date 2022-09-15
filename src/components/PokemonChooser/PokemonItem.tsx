@@ -23,16 +23,6 @@ const PokemonItem: React.FC<{
 
   const { data, error, status } = useGetPokemon(pokemonId)
 
-  // const fetchPokemon = async (number: number): Promise<Pokemon> => {
-  //   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${number}`)
-  //   return await response.json()
-  // }
-  // const { data, error, status } = useQuery(
-  //   ["pokemon", pokemonId],
-  //   () => fetchPokemon(pokemonId),
-  //   { staleTime: Infinity }
-  // )
-
   const addPokemonToPlayer = useStore((state) => state.addPokemonToPlayer)
 
   const playerChoosingPokemons = useStore(
