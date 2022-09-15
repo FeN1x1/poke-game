@@ -3,13 +3,22 @@ import { generateRandomNumberForPlayer } from "../../utils/rndNumber"
 import { useState } from "react"
 import { useStore } from "../../store/pokemonStore"
 import { useRouter } from "next/router"
-import { Player, PokemonType } from "../../types"
+import { Player } from "../../types"
 
 const PokemonPicker = () => {
   const [
-    isFirstPokemonChooserForBattleSet,
-    setIsFirstPokemonChooserForBattleSet,
+    isFirstPokemonChoosedForBattleSet,
+    setIsFirstPokemonChoosedForBattleSet,
   ] = useState<Player>()
+  const [firstPokemonId, setFirstPokemonId] = useState<number>(
+    generateRandomNumberForPlayer([])
+  )
+  const [secondPokemonId, setSecondPokemonId] = useState<number>(
+    generateRandomNumberForPlayer([])
+  )
+
+  const [firstPlayerRerolls, setFirstPlayerRerolls] = useState<number>(0)
+  const [secondPlayerRerolls, setSecondPlayerRerolls] = useState<number>(0)
   const getPlayerPokemons = useStore((state) => state.playerPokemons)
   const router = useRouter()
 
@@ -34,18 +43,11 @@ const PokemonPicker = () => {
     ]
   }
 
-  const [firstPokemonId, setFirstPokemonId] = useState<number>(
-    generateRandomNumberForPlayer([])
-  )
-  const [secondPokemonId, setSecondPokemonId] = useState<number>(
-    generateRandomNumberForPlayer([])
-  )
-
   if (
     (firstPlayerPokemonsLength === 5 || secondPlayerPokemonsLength === 5) &&
-    !isFirstPokemonChooserForBattleSet
+    !isFirstPokemonChoosedForBattleSet
   ) {
-    setIsFirstPokemonChooserForBattleSet(
+    setIsFirstPokemonChoosedForBattleSet(
       firstPlayerPokemonsLength === 5 ? Player.first : Player.second
     )
   }
@@ -70,6 +72,8 @@ const PokemonPicker = () => {
               generateRandomNumberForPlayer(generatedPokemonsCombined())
             )
           }
+          rerolls={firstPlayerRerolls}
+          playerRerolled={() => setFirstPlayerRerolls(firstPlayerRerolls + 1)}
         />
       </div>
       <div className="mt-auto">
@@ -82,6 +86,8 @@ const PokemonPicker = () => {
               generateRandomNumberForPlayer(generatedPokemonsCombined())
             )
           }
+          rerolls={secondPlayerRerolls}
+          playerRerolled={() => setSecondPlayerRerolls(secondPlayerRerolls + 1)}
         />
       </div>
     </div>

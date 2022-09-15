@@ -18,7 +18,16 @@ const PokemonItem: React.FC<{
   pokemonId: number
   chosenNumber: number
   generatePokemon: () => void
-}> = ({ player, pokemonId, chosenNumber, generatePokemon }) => {
+  rerolls: number
+  playerRerolled: () => void
+}> = ({
+  player,
+  pokemonId,
+  chosenNumber,
+  generatePokemon,
+  rerolls,
+  playerRerolled,
+}) => {
   const pokemonCardRef = useRef(null)
 
   const { data, error, status } = useGetPokemon(pokemonId)
@@ -50,6 +59,11 @@ const PokemonItem: React.FC<{
     await Haptics.impact({ style: ImpactStyle.Medium })
     addPokemonToPlayer(player, pokemonId, pokemonName)
     generatePokemon()
+  }
+
+  const reroll = () => {
+    generatePokemon()
+    playerRerolled()
   }
 
   const areAllPokemonsChosen = () => {
@@ -92,14 +106,20 @@ const PokemonItem: React.FC<{
                   </Button>
 
                   <Button
-                    onClick={generatePokemon}
+                    className="text-xs"
+                    onClick={reroll}
                     large
+                    disabled={rerolls === 10}
                     rounded
                     colors={{
                       bg: "bg-red-500",
                     }}
                   >
-                    Next
+                    {rerolls === 10 ? (
+                      <>You've used all rerolls</>
+                    ) : (
+                      <>Reroll ({rerolls} out of 10)</>
+                    )}
                   </Button>
                 </div>
               </div>
