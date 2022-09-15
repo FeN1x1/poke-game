@@ -26,16 +26,12 @@ const PokemonPicker = () => {
       (p) => p.pokemonId
     )
 
-    if (firstPokemonId !== null && secondPokemonId !== null) {
-      return [
-        ...firstPlayerPokemons,
-        ...secondPlayerPokemons,
-        firstPokemonId,
-        secondPokemonId,
-      ]
-    }
-
-    return [...firstPlayerPokemons, ...secondPlayerPokemons]
+    return [
+      ...firstPlayerPokemons,
+      ...secondPlayerPokemons,
+      firstPokemonId,
+      secondPokemonId,
+    ]
   }
 
   const [firstPokemonId, setFirstPokemonId] = useState<number>(
